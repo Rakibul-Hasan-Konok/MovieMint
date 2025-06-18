@@ -1,5 +1,5 @@
 import { Inngest } from "inngest";
-import User from "../models/userModel.js"; // Adjust path as needed
+import User from "../models/User.js"; // Adjust path as needed
 
 // Create Inngest client
 export const inngest = new Inngest({ id: "movie-ticket-booking" });
