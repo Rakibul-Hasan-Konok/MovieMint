@@ -19,3 +19,11 @@ body{
 .no-scrollbar{
   scrollbar-width: none;
 }
+
+inut ::-webkit-outer-spin-button,
+input::-webkit-file-upload-button{
+  -webkit-appearance: none;
+}
+::-webkit-calendar-picker-indicator{
+  filter: invert(1);
+}
