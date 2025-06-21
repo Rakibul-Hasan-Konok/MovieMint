@@ -14,15 +14,19 @@ import Favorite from './pages/Favorite';
 import SeatLayout from './pages/SeatLayout';
 
 // Admin Pages
-import AdminLayout from './pages/admin/AdminLayout';
+import AdminLayout from './pages/admin/AdminLayout';  // Correct import
 import Dashboard from './pages/admin/Dashboard';
 import AddShows from './pages/admin/AddShows';
 import ListShows from './pages/admin/ListShows';
 import ListBookings from './pages/admin/ListBookings';
 
+import { useAppContext } from './context/AppContext';
+import { SignIn } from '@clerk/clerk-react';
+
 const App = () => {
   const { pathname } = useLocation();
   const isAdminRoute = pathname.startsWith('/admin');
+  const { user } = useAppContext();
 
   return (
     <>
@@ -39,7 +43,18 @@ const App = () => {
         <Route path="/favorites" element={<Favorite />} />
 
         {/* Admin Routes */}
-        <Route path="/admin/*" element={<AdminLayout />}>
+        <Route
+          path="/admin/*"
+          element={
+            user ? (
+              <AdminLayout />
+            ) : (
+              <div className="min-h-screen flex justify-center items-center">
+                <SignIn fallbackRedirectUrl={'/admin'} />
+              </div>
+            )
+          }
+        >
           <Route index element={<Dashboard />} />
           <Route path="add-shows" element={<AddShows />} />
           <Route path="list-shows" element={<ListShows />} />

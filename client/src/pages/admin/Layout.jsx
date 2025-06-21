@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminNavbar from '../../components/admin/AdminNavbar';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 import { Outlet } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext';
+import Loading from '../../components/Loading';
 
-const AdminLayout = () => {
-  return (
+const Layout = () => {
+  const { isAdmin, fetchIsAdmin } = useAppContext();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        await fetchIsAdmin();
+      } catch (error) {
+        console.error('Admin check failed:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAdmin();
+  }, [fetchIsAdmin]);
+
+  if (loading) return <Loading />;
+
+  return isAdmin ? (
     <>
       <AdminNavbar />
       <div className="flex">
@@ -14,7 +34,11 @@ const AdminLayout = () => {
         </div>
       </div>
     </>
+  ) : (
+    <div className="h-screen flex items-center justify-center text-red-500 font-bold text-xl">
+      Access Denied
+    </div>
   );
 };
 
-export default AdminLayout;
+export default Layout;
